@@ -33,7 +33,6 @@ public class UserInterface {
         System.out.flush();
     }
     
-    
     public static ChessPosition readChessPosition(Scanner sc) {
         try {
             String s = sc.nextLine().toLowerCase();

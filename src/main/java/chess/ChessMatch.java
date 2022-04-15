@@ -30,12 +30,15 @@ public class ChessMatch {
         if (!this.board.thereIsAPieces(position)) {
             throw new ChessException("There is no piece on source position!");
         }
+        if (!this.board.piece(position).isThereAnyPossibleMoves()) {
+            throw new ChessException("There is no possible moves for the chosen piece!");
+        }
     }
     
     private Piece makeMove(Position source, Position target) {
         Piece p = this.board.removePiece(source);
         Piece capturedPiece = this.board.removePiece(target);
-        this.board.placePiece(p,target);
+        this.board.placePiece(p, target);
         return capturedPiece;
     }
     
