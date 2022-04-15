@@ -8,11 +8,28 @@ import chess.pieces.Rook;
 
 public class ChessMatch {
     
+    private int turn;
+    private Color currentPlayer;
     private Board board;
     
     public ChessMatch() {
+        this.turn = 1;
+        this.currentPlayer = Color.CYAN;
         this.board = new Board(8, 8);
         this.initialSetup();
+    }
+    
+    public int getTurn() {
+        return this.turn;
+    }
+    
+    public Color getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+    
+    private void nextTurn() {
+        this.turn++;
+        this.currentPlayer = currentPlayer == (Color.CYAN) ? Color.YELLOW : Color.CYAN;
     }
     
     public ChessPiece[][] getPieces() {
@@ -30,13 +47,16 @@ public class ChessMatch {
         if (!board.thereIsAPiece(position)) {
             throw new ChessException("There is no piece on source position!");
         }
+        if (this.currentPlayer != ((ChessPiece) (this.board.piece(position))).getColor()) {
+            throw new ChessException("The chosen piece is not yours!");
+        }
         if (!board.piece(position).isThereAnyPossibleMove()) {
             throw new ChessException("There is no possible moves for the chosen piece!");
         }
     }
     
-    private void validateTargetPosition(Position source, Position target){
-        if(!this.board.piece(source).possibleMove(target)){
+    private void validateTargetPosition(Position source, Position target) {
+        if (!this.board.piece(source).possibleMove(target)) {
             throw new ChessException("The chosen piece can't move to target position!");
         }
     }
@@ -58,8 +78,9 @@ public class ChessMatch {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
         this.validateSourcePosition(source);
-        this.validateTargetPosition(source ,target);
+        this.validateTargetPosition(source, target);
         Piece capturedPiece = this.makeMove(source, target);
+        this.nextTurn();
         return (ChessPiece) capturedPiece;
     }
     
@@ -76,12 +97,12 @@ public class ChessMatch {
         this.placeNewPiece('e', 1, new Rook(board, Color.CYAN));
         this.placeNewPiece('d', 1, new King(board, Color.CYAN));
         
-        this.placeNewPiece('c', 8, new Rook(board, Color.BLACK));
-        this.placeNewPiece('d', 7, new Rook(board, Color.BLACK));
-        this.placeNewPiece('c', 7, new Rook(board, Color.BLACK));
-        this.placeNewPiece('e', 7, new Rook(board, Color.BLACK));
-        this.placeNewPiece('e', 8, new Rook(board, Color.BLACK));
-        this.placeNewPiece('d', 8, new King(board, Color.BLACK));
+        this.placeNewPiece('c', 8, new Rook(board, Color.YELLOW));
+        this.placeNewPiece('d', 7, new Rook(board, Color.YELLOW));
+        this.placeNewPiece('c', 7, new Rook(board, Color.YELLOW));
+        this.placeNewPiece('e', 7, new Rook(board, Color.YELLOW));
+        this.placeNewPiece('e', 8, new Rook(board, Color.YELLOW));
+        this.placeNewPiece('d', 8, new King(board, Color.YELLOW));
         
     }
 }
