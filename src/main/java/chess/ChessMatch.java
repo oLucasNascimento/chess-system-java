@@ -48,6 +48,12 @@ public class ChessMatch {
         return capturedPiece;
     }
     
+    public boolean[][] possibleMoves(ChessPosition sourcePosition) {
+        Position position = sourcePosition.toPosition();
+        validateSourcePosition(position);
+        return this.board.piece(position).possibleMoves();
+    }
+    
     public ChessPiece performChessMovie(ChessPosition sourcePosition, ChessPosition targetPosition) {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
@@ -63,12 +69,12 @@ public class ChessMatch {
     
     private void initialSetup() {
         
-        this.placeNewPiece('c', 1, new Rook(board, Color.WHITE));
-        this.placeNewPiece('c', 2, new Rook(board, Color.WHITE));
-        this.placeNewPiece('d', 2, new Rook(board, Color.WHITE));
-        this.placeNewPiece('e', 2, new Rook(board, Color.WHITE));
-        this.placeNewPiece('e', 1, new Rook(board, Color.WHITE));
-        this.placeNewPiece('d', 1, new King(board, Color.WHITE));
+        this.placeNewPiece('c', 1, new Rook(board, Color.CYAN));
+        this.placeNewPiece('c', 2, new Rook(board, Color.CYAN));
+        this.placeNewPiece('d', 2, new Rook(board, Color.CYAN));
+        this.placeNewPiece('e', 2, new Rook(board, Color.CYAN));
+        this.placeNewPiece('e', 1, new Rook(board, Color.CYAN));
+        this.placeNewPiece('d', 1, new King(board, Color.CYAN));
         
         this.placeNewPiece('c', 8, new Rook(board, Color.BLACK));
         this.placeNewPiece('d', 7, new Rook(board, Color.BLACK));
