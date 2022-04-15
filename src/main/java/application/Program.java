@@ -39,7 +39,7 @@ public class Program {
                 
                 ChessPiece capturedPiece = chessMatch.performChessMovie(source, target);
                 
-                if(capturedPiece != null) {
+                if (capturedPiece != null) {
                     captured.add(capturedPiece);
                 }
                 
