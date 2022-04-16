@@ -16,6 +16,7 @@ public class ChessMatch {
     private Color currentPlayer;
     private Board board;
     private boolean check;
+    private boolean checkMate;
     private List<Piece> piecesOnTheBoard;
     private List<Piece> capturedPieces;
     
@@ -38,6 +39,10 @@ public class ChessMatch {
     
     public boolean getCheck() {
         return this.check;
+    }
+    
+    public boolean getCheckMate() {
+        return this.checkMate;
     }
     
     private void nextTurn() {
@@ -114,14 +119,18 @@ public class ChessMatch {
             throw new ChessException("You can't put yourself in check!");
         }
         
-        this.check = (this.testCheck(opponent(currentPlayer))) ? true : false;
+        this.check = this.testCheck(opponent(currentPlayer));
         
-        this.nextTurn();
+        if (testCheckMate(opponent(currentPlayer))) {
+            checkMate = true;
+        } else {
+            this.nextTurn();
+        }
         return (ChessPiece) capturedPiece;
     }
     
     private Color opponent(Color color) {
-        return (color == color.CYAN) ? color.YELLOW : color.CYAN;
+        return (color == Color.CYAN) ? Color.YELLOW : Color.CYAN;
     }
     
     private ChessPiece king(Color color) {
@@ -131,9 +140,7 @@ public class ChessMatch {
                 return (ChessPiece) p;
             }
         }
-        
         throw new IllegalStateException("There is no " + color + " king on the board!");
-        
     }
     
     private boolean testCheck(Color color) {
@@ -148,6 +155,31 @@ public class ChessMatch {
         return false;
     }
     
+    private boolean testCheckMate(Color color) {
+        if (!testCheck(color)) {
+            return false;
+        }
+        List<Piece> list = this.piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor() == color).collect(Collectors.toList());
+        for (Piece p : list) {
+            boolean[][] mat = p.possibleMoves();
+            for (int i = 0; i < this.board.getRows(); i++) {
+                for (int j = 0; j < this.board.getColumns(); j++) {
+                    if ((mat[i][j])) {
+                        Position source = ((ChessPiece) p).getChessPosition().toPosition();
+                        Position targer = new Position(i, j);
+                        Piece capturedPiece = makeMove(source, targer);
+                        boolean testCheck = this.testCheck(color);
+                        undoMove(source, targer, capturedPiece);
+                        if (!testCheck(color)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
     private void placeNewPiece(char column, int row, ChessPiece piece) {
         this.board.placePiece(piece, new ChessPosition(column, row).toPosition());
         this.piecesOnTheBoard.add(piece);
@@ -155,19 +187,12 @@ public class ChessMatch {
     
     private void initialSetup() {
         
-        this.placeNewPiece('c', 1, new Rook(board, Color.CYAN));
-        this.placeNewPiece('c', 2, new Rook(board, Color.CYAN));
-        this.placeNewPiece('d', 2, new Rook(board, Color.CYAN));
-        this.placeNewPiece('e', 2, new Rook(board, Color.CYAN));
-        this.placeNewPiece('e', 1, new Rook(board, Color.CYAN));
-        this.placeNewPiece('d', 1, new King(board, Color.CYAN));
+        this.placeNewPiece('h', 7, new Rook(board, Color.CYAN));
+        this.placeNewPiece('d', 1, new Rook(board, Color.CYAN));
+        this.placeNewPiece('e', 1, new King(board, Color.CYAN));
         
-        this.placeNewPiece('c', 8, new Rook(board, Color.YELLOW));
-        this.placeNewPiece('d', 7, new Rook(board, Color.YELLOW));
-        this.placeNewPiece('c', 7, new Rook(board, Color.YELLOW));
-        this.placeNewPiece('e', 7, new Rook(board, Color.YELLOW));
-        this.placeNewPiece('e', 8, new Rook(board, Color.YELLOW));
-        this.placeNewPiece('d', 8, new King(board, Color.YELLOW));
+        this.placeNewPiece('b', 8, new Rook(board, Color.YELLOW));
+        this.placeNewPiece('a', 8, new King(board, Color.YELLOW));
         
     }
 }
