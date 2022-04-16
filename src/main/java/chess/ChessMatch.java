@@ -167,11 +167,11 @@ public class ChessMatch {
                 for (int j = 0; j < this.board.getColumns(); j++) {
                     if ((mat[i][j])) {
                         Position source = ((ChessPiece) p).getChessPosition().toPosition();
-                        Position targer = new Position(i, j);
-                        Piece capturedPiece = makeMove(source, targer);
+                        Position target = new Position(i, j);
+                        Piece capturedPiece = makeMove(source, target);
                         boolean testCheck = this.testCheck(color);
-                        undoMove(source, targer, capturedPiece);
-                        if (!testCheck(color)) {
+                        undoMove(source, target, capturedPiece);
+                        if (!testCheck) {
                             return false;
                         }
                     }
@@ -188,10 +188,10 @@ public class ChessMatch {
     
     private void initialSetup() {
         
-        
         placeNewPiece('a', 1, new Rook(board, Color.CYAN));
         placeNewPiece('b', 1, new Knight(board, Color.CYAN));
         placeNewPiece('c', 1, new Bishop(board, Color.CYAN));
+        placeNewPiece('d', 1, new Queen(board, Color.CYAN));
         placeNewPiece('e', 1, new King(board, Color.CYAN));
         placeNewPiece('f', 1, new Bishop(board, Color.CYAN));
         placeNewPiece('g', 1, new Knight(board, Color.CYAN));
@@ -205,9 +205,10 @@ public class ChessMatch {
         placeNewPiece('g', 2, new Pawn(board, Color.CYAN));
         placeNewPiece('h', 2, new Pawn(board, Color.CYAN));
         
-        placeNewPiece('a', 8, new King(board, Color.YELLOW));
+        placeNewPiece('a', 8, new Rook(board, Color.YELLOW));
         placeNewPiece('b', 8, new Knight(board, Color.YELLOW));
         placeNewPiece('c', 8, new Bishop(board, Color.YELLOW));
+        placeNewPiece('d', 8, new Queen(board, Color.YELLOW));
         placeNewPiece('e', 8, new King(board, Color.YELLOW));
         placeNewPiece('f', 8, new Bishop(board, Color.YELLOW));
         placeNewPiece('g', 8, new Knight(board, Color.YELLOW));
@@ -220,6 +221,5 @@ public class ChessMatch {
         placeNewPiece('f', 7, new Pawn(board, Color.YELLOW));
         placeNewPiece('g', 7, new Pawn(board, Color.YELLOW));
         placeNewPiece('h', 7, new Pawn(board, Color.YELLOW));
-        
     }
 }
