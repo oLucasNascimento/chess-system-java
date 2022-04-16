@@ -132,8 +132,6 @@ public class UserInterface {
         System.out.print(ANSI_YELLOW);
         System.out.println(Arrays.toString(yellow.toArray()));
         System.out.print(ANSI_RESET);
-        
-        
     }
     
 }
